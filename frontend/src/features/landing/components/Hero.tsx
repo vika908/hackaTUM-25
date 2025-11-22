@@ -16,9 +16,11 @@ export const Hero = () => {
                 Secure your intellectual property. Our open-source solution embeds robust, invisible watermarks into AI-generated text and images, ensuring authenticity and traceability.
             </p>
             <div className="flex gap-4">
-                <Button size="lg" className="gap-2">
-                    <ShieldCheck className="w-4 h-4" />
-                    Start Watermarking
+                <Button size="lg" className="gap-2" asChild>
+                    <Link to="/gemma-synthID">
+                        <ShieldCheck className="w-4 h-4" />
+                        Try out LLM watermarking & SynthID
+                    </Link>
                 </Button>
                 <Button variant="outline" size="lg">
                     View on GitHub
