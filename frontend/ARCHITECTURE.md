@@ -26,7 +26,14 @@ The application is built using **React**, **TypeScript**, and **Vite**, followin
     *   Isolated feature with its own routes and components.
     *   Uses shared UI components (`Button`, `Card` concepts) but maintains feature-specific layout.
 
-### 2. [Future] Authentication
+### 2. Server Stats (`src/features/server-stats`)
+*   **Purpose**: Simple diagnostic page to check backend connectivity.
+*   **Flow**:
+    *   **Status Check**: Pings `/api/health` and displays online/offline status.
+*   **Architecture**:
+    *   Uses `react-query` for data fetching and state handling (loading/error).
+
+### 3. [Future] Authentication
 *   (Planned) Will handle user login/signup flows.
 
 ### 3. [Future] Dashboard/Watermarking Tool

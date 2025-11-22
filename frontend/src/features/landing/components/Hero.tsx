@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ShieldCheck, Sparkles } from 'lucide-react';
+import { ShieldCheck, Sparkles, Activity } from 'lucide-react';
 
 export const Hero = () => {
     return (
@@ -21,6 +22,12 @@ export const Hero = () => {
                 </Button>
                 <Button variant="outline" size="lg">
                     View on GitHub
+                </Button>
+                <Button variant="ghost" size="lg" asChild>
+                    <Link to="/health">
+                        <Activity className="w-4 h-4 mr-2" />
+                        System Status
+                    </Link>
                 </Button>
             </div>
         </div>
