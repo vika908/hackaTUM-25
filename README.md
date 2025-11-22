@@ -1,5 +1,7 @@
 <b>To run the backend:</b>  
-pip install -r requirements.txt  
+python -m venv venv # Creates venv  
+./venv/Scripts/activate # Activates venv  
+pip install -r "requirements.txt"  
 fastapi dev app/main.py  
 
 <b>To run the frontend:</b>    
