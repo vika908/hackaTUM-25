@@ -7,7 +7,7 @@ Waldo is a comprehensive platform for generating and detecting watermarks in AI-
 ---  
 ## 📚 Open Source Library
 
-We have extracted our core research into a standalone library for the community.  
+We have extracted our core research and trials into a standalone library for the community.  
 It includes:
 - **Gemma Detector**: Detects invisible zero-width characters and statistical watermarks in text.
 - **Stable Diffusion Detector**: Analyzes frequency domain (FFT) to find injected noise patterns in images.
