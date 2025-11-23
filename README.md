@@ -1,24 +1,71 @@
-<b>To run the backend:</b>  
-python -m venv venv # Creates venv  
-./venv/Scripts/activate # Activates venv  
-pip install -r "requirements.txt"  
-gcloud auth application-default login # Login with hackatum gcp details, requires gcli. Sets ADC locally  
-fastapi dev app/main.py  
+# 🕵️‍♂️ Waldo: AI Watermarking & Detection Platform
 
-<b>To run the frontend:</b>    
-npm install  
-npm run dev  
+> **"Waldo hides, we find."**
 
-Go to /health in the browser or click system status to check whether both are working or not.
+Waldo is a comprehensive platform for generating and detecting watermarks in AI-generated content (Text & Images). It consists of a web application for easy interaction and an open-source library for researchers and developers.
 
-Attached below are cognitive models that you can use to understand the watermarking process and detectors.
+## 📂 Project Structure
 
-Firstly, we have the Gemma model which we watermarked using SynthID and a cheeky static watermark.
+- **[`frontend/`](./frontend)**: A Next.js web interface for users to generate and detect watermarks.
+- **[`backend/`](./backend)**: A FastAPI server handling the core logic and model inference.
+- **[`oss_library/`](./oss_library)**: **(New!)** A standalone open-source library containing:
+    -   **`waldo`**: Notebooks for generating watermarked content.
+    -   **`wheres_waldo`**: A lightweight Python package for detection.
 
-Secondly, we have the StableDiffusion model which we watermarked using a Fourier transform.
- 
-Papers list:
-[Scalable watermarking for identifying large language model outputs: SynthID Text Google](https://www.nature.com/articles/s41586-024-08025-4)  
-[Gemma 2: Improving Open Language Models at a Practical Size](https://arxiv.org/abs/2408.00118)  
-[High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752)  
-[Secure Data Embedding using Fourier Transform-based Watermarking](https://ieeexplore.ieee.org/document/10726146)  
+---
+
+## 🚀 Quick Start
+
+### 1. Backend Setup
+The backend powers the detection API.
+
+```bash
+# 1. Create & Activate Virtual Environment
+python -m venv venv
+./venv/Scripts/activate  # Windows
+# source venv/bin/activate # Linux/Mac
+
+# 2. Install Dependencies
+pip install -r "requirements.txt"
+
+# 3. Authenticate (Required for Vertex AI)
+gcloud auth application-default login
+
+# 4. Run Server
+fastapi dev app/main.py
+```
+
+### 2. Frontend Setup
+The frontend provides the user interface.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Visit `http://localhost:3000` to use the app.
+Check system status at `http://localhost:3000/health`.
+
+---
+
+## 📚 Open Source Library
+
+We have extracted our core research into a standalone library for the community.
+
+👉 **[Explore the OSS Library](./oss_library/README.md)**
+
+It includes:
+- **Gemma Detector**: Detects invisible zero-width characters and statistical watermarks in text.
+- **Stable Diffusion Detector**: Analyzes frequency domain (FFT) to find injected noise patterns in images.
+
+---
+
+## 🔬 References & Research
+
+This project implements concepts from the following papers:
+
+- [Scalable watermarking for identifying large language model outputs: SynthID Text (Google)](https://www.nature.com/articles/s41586-024-08025-4)
+- [Gemma 2: Improving Open Language Models at a Practical Size](https://arxiv.org/abs/2408.00118)
+- [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752)
+- [Secure Data Embedding using Fourier Transform-based Watermarking](https://ieeexplore.ieee.org/document/10726146)
