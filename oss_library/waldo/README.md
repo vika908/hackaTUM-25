@@ -8,7 +8,7 @@ The models here are already ready to be used as a fastapi server connected with 
 Gemma-2b-2-it- A simple model from Google released in 2024 for mainly text generation. We have used SynthID's watermarking and a cheeky watermarking method to add a watermark to the generated text.  
 <img width="3364" height="821" alt="gemma_watermark_insertion" src="https://github.com/user-attachments/assets/2aff7278-7359-43f7-84c9-0deef7d3e8aa" />
 <img width="4119" height="834" alt="gemma_watermark_detection" src="https://github.com/user-attachments/assets/f7b0b7c8-63cc-417d-9271-cabf87a276fa" />
-We have been cheeky here and added a deterministic check as well by hiding zero width spaces in the LLM text. Unfortunately resource limitations did not allow us to find a sweet spot while training the bayesian detector model and our model configurations produced poor results with the weighted means model. These models are fairly easy to setup if the user wishes so.
+We have been cheeky here and added a deterministic check as well by hiding zero width spaces in the LLM text. Unfortunately resource limitations did not allow us to find a sweet spot while training the bayesian detector model so we used a combination of the weighted means model and the deterministic check. These detector models are fairly easy to setup if the user wishes so.
 
 
 StableDiffusion-v1-5- A simple model from HuggingFace released in 2024 for mainly image generation. We have used a custom noise injection method to add a watermark to the generated image. 
