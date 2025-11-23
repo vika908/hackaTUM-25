@@ -74,6 +74,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../app/api/health-image/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/health-image">> = Specific
+  const handler = {} as typeof import("../../../app/api/health-image/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../app/api/health-text/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/health-text">> = Specific
+  const handler = {} as typeof import("../../../app/api/health-text/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../app/api/prompt-image/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/prompt-image">> = Specific

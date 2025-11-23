@@ -166,8 +166,10 @@
     --color-red-50: #fef2f2;
     --color-red-300: #ffa3a3;
     --color-red-400: #ff6568;
+    --color-red-500: #fb2c36;
     --color-red-600: #e40014;
     --color-yellow-500: #edb200;
+    --color-green-500: #00c758;
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
@@ -225,8 +227,10 @@
       --color-red-50: lab(96.5005% 4.18511 1.52329);
       --color-red-300: lab(76.5514% 36.4219 15.5335);
       --color-red-400: lab(63.7053% 60.7449 31.3109);
+      --color-red-500: lab(55.4814% 75.0732 48.8528);
       --color-red-600: lab(48.4493% 77.4328 61.5452);
       --color-yellow-500: lab(76.3898% 14.5258 98.4589);
+      --color-green-500: lab(70.5521% -66.5147 45.8072);
     }
   }
 }
@@ -2447,6 +2451,10 @@
     }
   }
 
+  .text-green-500 {
+    color: var(--color-green-500);
+  }
+
   .text-muted-foreground {
     color: var(--muted-foreground);
   }
@@ -2471,6 +2479,10 @@
 
   .text-primary-foreground {
     color: var(--primary-foreground);
+  }
+
+  .text-red-500 {
+    color: var(--color-red-500);
   }
 
   .text-secondary-foreground {

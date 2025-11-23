@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
@@ -23,6 +23,8 @@ export default function InteractiveDemo() {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
   const [detectionResult, setDetectionResult] = useState<DetectionResult>(null)
   const [checking, setChecking] = useState(false)
+  const [textServerStatus, setTextServerStatus] = useState<"up" | "down" | "checking">("checking")
+  const [imageServerStatus, setImageServerStatus] = useState<"up" | "down" | "checking">("checking")
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
@@ -214,11 +216,43 @@ export default function InteractiveDemo() {
       case "probably-ai":
         return "Probably AI"
       case "not-ai":
-        return "Not AI"
+        return "Clear"
       default:
         return ""
     }
   }
+
+  const checkServerHealth = async () => {
+    // Check text server health
+    try {
+      const textResponse = await fetch("/api/health-text")
+      const textData = await textResponse.json()
+      setTextServerStatus(textData.status === "up" ? "up" : "down")
+    } catch (error) {
+      console.error("Error checking text server health:", error)
+      setTextServerStatus("down")
+    }
+
+    // Check image server health
+    try {
+      const imageResponse = await fetch("/api/health-image")
+      const imageData = await imageResponse.json()
+      setImageServerStatus(imageData.status === "up" ? "up" : "down")
+    } catch (error) {
+      console.error("Error checking image server health:", error)
+      setImageServerStatus("down")
+    }
+  }
+
+  useEffect(() => {
+    // Check health on mount
+    checkServerHealth()
+
+    // Check health every 30 seconds
+    const interval = setInterval(checkServerHealth, 30000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <section id="demo" className="py-20 sm:py-28 border-b border-border/40">
@@ -226,11 +260,27 @@ export default function InteractiveDemo() {
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Try It Yourself</h2>
           <p className="text-lg text-muted-foreground text-balance max-w-2xl mx-auto">
-            Generate AI content and see the difference between clear and watermarked responses
+            We are hosting our own LLM server wich  a custom watermarking model. You can see the difference beetween a watermarked and a clear response.
           </p>
         </div>
 
         <Tabs defaultValue="generate" className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">
+                Text Server: <span className={textServerStatus === "up" ? "text-green-500 font-medium" : textServerStatus === "down" ? "text-red-500 font-medium" : ""}>
+                  {textServerStatus === "checking" ? "Checking..." : textServerStatus === "up" ? "Up" : "Down"}
+                </span>
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-muted-foreground">
+                Image Server: <span className={imageServerStatus === "up" ? "text-green-500 font-medium" : imageServerStatus === "down" ? "text-red-500 font-medium" : ""}>
+                  {imageServerStatus === "checking" ? "Checking..." : imageServerStatus === "up" ? "Up" : "Down"}
+                </span>
+              </span>
+            </div>
+          </div>
           <TabsList className="grid w-full grid-cols-2 mb-8">
             <TabsTrigger value="generate" className="text-base">
               Generate & Compare

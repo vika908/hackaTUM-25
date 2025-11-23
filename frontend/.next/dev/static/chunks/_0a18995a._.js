@@ -352,6 +352,8 @@ function InteractiveDemo() {
     const [uploadedImage, setUploadedImage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [detectionResult, setDetectionResult] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [checking, setChecking] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [textServerStatus, setTextServerStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("checking");
+    const [imageServerStatus, setImageServerStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("checking");
     const handleGenerate = async ()=>{
         if (!prompt.trim()) return;
         setLoading(true);
@@ -508,7 +510,7 @@ function InteractiveDemo() {
                     className: "h-5 w-5 text-destructive"
                 }, void 0, false, {
                     fileName: "[project]/components/interactive-demo.tsx",
-                    lineNumber: 200,
+                    lineNumber: 202,
                     columnNumber: 16
                 }, this);
             case "probably-ai":
@@ -516,7 +518,7 @@ function InteractiveDemo() {
                     className: "h-5 w-5 text-yellow-500"
                 }, void 0, false, {
                     fileName: "[project]/components/interactive-demo.tsx",
-                    lineNumber: 202,
+                    lineNumber: 204,
                     columnNumber: 16
                 }, this);
             case "not-ai":
@@ -524,7 +526,7 @@ function InteractiveDemo() {
                     className: "h-5 w-5 text-accent"
                 }, void 0, false, {
                     fileName: "[project]/components/interactive-demo.tsx",
-                    lineNumber: 204,
+                    lineNumber: 206,
                     columnNumber: 16
                 }, this);
             default:
@@ -538,11 +540,42 @@ function InteractiveDemo() {
             case "probably-ai":
                 return "Probably AI";
             case "not-ai":
-                return "Not AI";
+                return "Clear";
             default:
                 return "";
         }
     };
+    const checkServerHealth = async ()=>{
+        // Check text server health
+        try {
+            const textResponse = await fetch("/api/health-text");
+            const textData = await textResponse.json();
+            setTextServerStatus(textData.status === "up" ? "up" : "down");
+        } catch (error) {
+            console.error("Error checking text server health:", error);
+            setTextServerStatus("down");
+        }
+        // Check image server health
+        try {
+            const imageResponse = await fetch("/api/health-image");
+            const imageData = await imageResponse.json();
+            setImageServerStatus(imageData.status === "up" ? "up" : "down");
+        } catch (error) {
+            console.error("Error checking image server health:", error);
+            setImageServerStatus("down");
+        }
+    };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "InteractiveDemo.useEffect": ()=>{
+            // Check health on mount
+            checkServerHealth();
+            // Check health every 30 seconds
+            const interval = setInterval(checkServerHealth, 30000);
+            return ({
+                "InteractiveDemo.useEffect": ()=>clearInterval(interval)
+            })["InteractiveDemo.useEffect"];
+        }
+    }["InteractiveDemo.useEffect"], []);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
         id: "demo",
         className: "py-20 sm:py-28 border-b border-border/40",
@@ -557,27 +590,86 @@ function InteractiveDemo() {
                             children: "Try It Yourself"
                         }, void 0, false, {
                             fileName: "[project]/components/interactive-demo.tsx",
-                            lineNumber: 227,
+                            lineNumber: 261,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "text-lg text-muted-foreground text-balance max-w-2xl mx-auto",
-                            children: "Generate AI content and see the difference between clear and watermarked responses"
+                            children: "We are hosting our own LLM server wich  a custom watermarking model. You can see the difference beetween a watermarked and a clear response."
                         }, void 0, false, {
                             fileName: "[project]/components/interactive-demo.tsx",
-                            lineNumber: 228,
+                            lineNumber: 262,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/interactive-demo.tsx",
-                    lineNumber: 226,
+                    lineNumber: 260,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Tabs"], {
                     defaultValue: "generate",
                     className: "max-w-6xl mx-auto",
                     children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center justify-center gap-4 mb-4",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-2 text-sm",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-muted-foreground",
+                                        children: [
+                                            "Text Server: ",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: textServerStatus === "up" ? "text-green-500 font-medium" : textServerStatus === "down" ? "text-red-500 font-medium" : "",
+                                                children: textServerStatus === "checking" ? "Checking..." : textServerStatus === "up" ? "Up" : "Down"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/interactive-demo.tsx",
+                                                lineNumber: 271,
+                                                columnNumber: 30
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/interactive-demo.tsx",
+                                        lineNumber: 270,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/interactive-demo.tsx",
+                                    lineNumber: 269,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-2 text-sm",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-muted-foreground",
+                                        children: [
+                                            "Image Server: ",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: imageServerStatus === "up" ? "text-green-500 font-medium" : imageServerStatus === "down" ? "text-red-500 font-medium" : "",
+                                                children: imageServerStatus === "checking" ? "Checking..." : imageServerStatus === "up" ? "Up" : "Down"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/interactive-demo.tsx",
+                                                lineNumber: 278,
+                                                columnNumber: 31
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/interactive-demo.tsx",
+                                        lineNumber: 277,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/interactive-demo.tsx",
+                                    lineNumber: 276,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/interactive-demo.tsx",
+                            lineNumber: 268,
+                            columnNumber: 11
+                        }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TabsList"], {
                             className: "grid w-full grid-cols-2 mb-8",
                             children: [
@@ -587,7 +679,7 @@ function InteractiveDemo() {
                                     children: "Generate & Compare"
                                 }, void 0, false, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 235,
+                                    lineNumber: 285,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TabsTrigger"], {
@@ -596,13 +688,13 @@ function InteractiveDemo() {
                                     children: "Detect Watermark"
                                 }, void 0, false, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 238,
+                                    lineNumber: 288,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/interactive-demo.tsx",
-                            lineNumber: 234,
+                            lineNumber: 284,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -621,7 +713,7 @@ function InteractiveDemo() {
                                                         children: "Enter your prompt"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 247,
+                                                        lineNumber: 297,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -631,13 +723,13 @@ function InteractiveDemo() {
                                                         className: "min-h-[100px] resize-none"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 248,
+                                                        lineNumber: 298,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 246,
+                                                lineNumber: 296,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -653,7 +745,7 @@ function InteractiveDemo() {
                                                                     className: "h-4 w-4 animate-spin"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                                    lineNumber: 263,
+                                                                    lineNumber: 313,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "Generating..."
@@ -664,7 +756,7 @@ function InteractiveDemo() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                                    lineNumber: 268,
+                                                                    lineNumber: 318,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "Generate Text Response"
@@ -672,7 +764,7 @@ function InteractiveDemo() {
                                                         }, void 0, true)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 256,
+                                                        lineNumber: 306,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -685,7 +777,7 @@ function InteractiveDemo() {
                                                                     className: "h-4 w-4 animate-spin"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                                    lineNumber: 280,
+                                                                    lineNumber: 330,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "Generating..."
@@ -696,7 +788,7 @@ function InteractiveDemo() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                                    lineNumber: 285,
+                                                                    lineNumber: 335,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "Generate Image Response"
@@ -704,24 +796,24 @@ function InteractiveDemo() {
                                                         }, void 0, true)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 323,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 255,
+                                                lineNumber: 305,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/interactive-demo.tsx",
-                                        lineNumber: 245,
+                                        lineNumber: 295,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 294,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -738,7 +830,7 @@ function InteractiveDemo() {
                                                             children: "Clear Response"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 297,
+                                                            lineNumber: 347,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -746,13 +838,13 @@ function InteractiveDemo() {
                                                             children: "No Watermark"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 298,
+                                                            lineNumber: 348,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 296,
+                                                    lineNumber: 346,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -763,12 +855,12 @@ function InteractiveDemo() {
                                                             className: "h-6 w-6 animate-spin text-primary"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 303,
+                                                            lineNumber: 353,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 302,
+                                                        lineNumber: 352,
                                                         columnNumber: 21
                                                     }, this) : clearImageResponse ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                                         src: clearImageResponse,
@@ -776,31 +868,31 @@ function InteractiveDemo() {
                                                         className: "w-full h-auto rounded-md"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 306,
+                                                        lineNumber: 356,
                                                         columnNumber: 21
                                                     }, this) : clearResponse ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         children: clearResponse
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 312,
+                                                        lineNumber: 362,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         className: "text-muted-foreground/50",
                                                         children: "Response will appear here..."
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 314,
+                                                        lineNumber: 364,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 300,
+                                                    lineNumber: 350,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/interactive-demo.tsx",
-                                            lineNumber: 295,
+                                            lineNumber: 345,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -814,7 +906,7 @@ function InteractiveDemo() {
                                                             children: "Watermarked Response"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 321,
+                                                            lineNumber: 371,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -822,13 +914,13 @@ function InteractiveDemo() {
                                                             children: "Watermarked"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 322,
+                                                            lineNumber: 372,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 320,
+                                                    lineNumber: 370,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -839,12 +931,12 @@ function InteractiveDemo() {
                                                             className: "h-6 w-6 animate-spin text-primary"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 327,
+                                                            lineNumber: 377,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 326,
+                                                        lineNumber: 376,
                                                         columnNumber: 21
                                                     }, this) : watermarkedImageResponse ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
                                                         src: watermarkedImageResponse,
@@ -852,37 +944,37 @@ function InteractiveDemo() {
                                                         className: "w-full h-auto rounded-md"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 330,
+                                                        lineNumber: 380,
                                                         columnNumber: 21
                                                     }, this) : watermarkedResponse ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         children: watermarkedResponse
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 336,
+                                                        lineNumber: 386,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         className: "text-muted-foreground/50",
                                                         children: "Response will appear here..."
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 338,
+                                                        lineNumber: 388,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 324,
+                                                    lineNumber: 374,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/interactive-demo.tsx",
-                                            lineNumber: 319,
+                                            lineNumber: 369,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 294,
+                                    lineNumber: 344,
                                     columnNumber: 13
                                 }, this),
                                 clearResponse && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -892,18 +984,18 @@ function InteractiveDemo() {
                                         children: "💡 Both responses look identical, but the watermark is embedded invisibly in the second one"
                                     }, void 0, false, {
                                         fileName: "[project]/components/interactive-demo.tsx",
-                                        lineNumber: 346,
+                                        lineNumber: 396,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 345,
+                                    lineNumber: 395,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/interactive-demo.tsx",
-                            lineNumber: 243,
+                            lineNumber: 293,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TabsContent"], {
@@ -922,7 +1014,7 @@ function InteractiveDemo() {
                                                         children: "Paste content to check"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 357,
+                                                        lineNumber: 407,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -932,13 +1024,13 @@ function InteractiveDemo() {
                                                         className: "min-h-[200px] resize-none"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 358,
+                                                        lineNumber: 408,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 356,
+                                                lineNumber: 406,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -955,7 +1047,7 @@ function InteractiveDemo() {
                                                                 id: "image-upload"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                                lineNumber: 367,
+                                                                lineNumber: 417,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -966,20 +1058,20 @@ function InteractiveDemo() {
                                                                         className: "h-4 w-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                                        lineNumber: 378,
+                                                                        lineNumber: 428,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     "Add Image"
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                                lineNumber: 374,
+                                                                lineNumber: 424,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 366,
+                                                        lineNumber: 416,
                                                         columnNumber: 19
                                                     }, this),
                                                     uploadedImage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -991,7 +1083,7 @@ function InteractiveDemo() {
                                                                 className: "h-20 w-20 object-cover rounded-md border border-border"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                                lineNumber: 384,
+                                                                lineNumber: 434,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1001,24 +1093,24 @@ function InteractiveDemo() {
                                                                     className: "h-4 w-4"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                                    lineNumber: 393,
+                                                                    lineNumber: 443,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                                lineNumber: 389,
+                                                                lineNumber: 439,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 383,
+                                                        lineNumber: 433,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 365,
+                                                lineNumber: 415,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1031,7 +1123,7 @@ function InteractiveDemo() {
                                                             className: "h-4 w-4 animate-spin"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 405,
+                                                            lineNumber: 455,
                                                             columnNumber: 23
                                                         }, this),
                                                         "Analyzing..."
@@ -1039,18 +1131,18 @@ function InteractiveDemo() {
                                                 }, void 0, true) : "Check for Watermark"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 398,
+                                                lineNumber: 448,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/interactive-demo.tsx",
-                                        lineNumber: 355,
+                                        lineNumber: 405,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 354,
+                                    lineNumber: 404,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1067,7 +1159,7 @@ function InteractiveDemo() {
                                                             children: "Clear Response"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 418,
+                                                            lineNumber: 468,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1075,13 +1167,13 @@ function InteractiveDemo() {
                                                             children: "No Watermark"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 419,
+                                                            lineNumber: 469,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 417,
+                                                    lineNumber: 467,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1090,25 +1182,25 @@ function InteractiveDemo() {
                                                         children: clearResponse
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 423,
+                                                        lineNumber: 473,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         className: "text-muted-foreground/50",
                                                         children: "Generate content in the other tab first..."
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 425,
+                                                        lineNumber: 475,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 421,
+                                                    lineNumber: 471,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/interactive-demo.tsx",
-                                            lineNumber: 416,
+                                            lineNumber: 466,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1122,7 +1214,7 @@ function InteractiveDemo() {
                                                             children: "Watermarked Response"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 432,
+                                                            lineNumber: 482,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1130,13 +1222,13 @@ function InteractiveDemo() {
                                                             children: "Watermarked"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/interactive-demo.tsx",
-                                                            lineNumber: 433,
+                                                            lineNumber: 483,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 431,
+                                                    lineNumber: 481,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1145,31 +1237,31 @@ function InteractiveDemo() {
                                                         children: watermarkedResponse
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 437,
+                                                        lineNumber: 487,
                                                         columnNumber: 21
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                         className: "text-muted-foreground/50",
                                                         children: "Generate content in the other tab first..."
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 439,
+                                                        lineNumber: 489,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/interactive-demo.tsx",
-                                                    lineNumber: 435,
+                                                    lineNumber: 485,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/interactive-demo.tsx",
-                                            lineNumber: 430,
+                                            lineNumber: 480,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 415,
+                                    lineNumber: 465,
                                     columnNumber: 13
                                 }, this),
                                 detectionResult && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1182,7 +1274,7 @@ function InteractiveDemo() {
                                                 children: getResultIcon()
                                             }, void 0, false, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 448,
+                                                lineNumber: 498,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1192,7 +1284,7 @@ function InteractiveDemo() {
                                                         children: getResultText()
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 452,
+                                                        lineNumber: 502,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1204,51 +1296,51 @@ function InteractiveDemo() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/interactive-demo.tsx",
-                                                        lineNumber: 453,
+                                                        lineNumber: 503,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/interactive-demo.tsx",
-                                                lineNumber: 451,
+                                                lineNumber: 501,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/interactive-demo.tsx",
-                                        lineNumber: 447,
+                                        lineNumber: 497,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/interactive-demo.tsx",
-                                    lineNumber: 446,
+                                    lineNumber: 496,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/interactive-demo.tsx",
-                            lineNumber: 353,
+                            lineNumber: 403,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/interactive-demo.tsx",
-                    lineNumber: 233,
+                    lineNumber: 267,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/interactive-demo.tsx",
-            lineNumber: 225,
+            lineNumber: 259,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/interactive-demo.tsx",
-        lineNumber: 224,
+        lineNumber: 258,
         columnNumber: 5
     }, this);
 }
-_s(InteractiveDemo, "MjWxMREp5n0kh58IRrjxU4VKERI=");
+_s(InteractiveDemo, "xijd1NvFMNsmsqc9h+RSAZWHWHI=");
 _c = InteractiveDemo;
 var _c;
 __turbopack_context__.k.register(_c, "InteractiveDemo");
