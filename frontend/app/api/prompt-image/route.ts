@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from "next/server"
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { prompt } = body
+    const { prompt, strength } = body
 
-    // Use default values for strength and target_radius
+    // Use provided strength or default to 2, keep target_radius at 40
     const requestBody = {
       prompt: prompt,
-      strength: 2.5,
+      strength: strength || 2,
       target_radius: 40,
     }
 

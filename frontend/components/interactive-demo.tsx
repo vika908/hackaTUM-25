@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2, Send, CheckCircle2, AlertCircle, XCircle, Plus, X } from "lucide-react"
 
@@ -25,6 +26,7 @@ export default function InteractiveDemo() {
   const [checking, setChecking] = useState(false)
   const [textServerStatus, setTextServerStatus] = useState<"up" | "down" | "checking">("checking")
   const [imageServerStatus, setImageServerStatus] = useState<"up" | "down" | "checking">("checking")
+  const [strength, setStrength] = useState(2)
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
@@ -79,7 +81,7 @@ export default function InteractiveDemo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt: prompt }),
+        body: JSON.stringify({ prompt: prompt, strength: strength }),
       })
 
       if (!response.ok) {
@@ -320,23 +322,63 @@ export default function InteractiveDemo() {
                       </>
                     )}
                   </Button>
-                  <Button
-                    onClick={handleGenerateImage}
-                    disabled={loading || !prompt.trim()}
-                    className="w-full sm:w-auto gap-2"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="h-4 w-4" />
-                        Generate Image Response
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex items-center gap-3 flex-1">
+                    <Button
+                      onClick={handleGenerateImage}
+                      disabled={loading || !prompt.trim()}
+                      className="w-full sm:w-auto gap-2"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          Generate Image Response
+                        </>
+                      )}
+                    </Button>
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium whitespace-nowrap">Strength:</label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="5"
+                        step="0.1"
+                        value={strength}
+                        onChange={(e) => {
+                          const inputValue = e.target.value
+                          if (inputValue === "") {
+                            // Allow empty input while typing
+                            return
+                          }
+                          const value = parseFloat(inputValue)
+                          if (!isNaN(value)) {
+                            // Clamp value between 1 and 5
+                            const clampedValue = Math.max(1, Math.min(5, value))
+                            setStrength(clampedValue)
+                          }
+                        }}
+                        onBlur={(e) => {
+                          // Ensure value is valid on blur
+                          const value = parseFloat(e.target.value)
+                          if (isNaN(value) || value < 1) {
+                            setStrength(2)
+                          } else if (value > 5) {
+                            setStrength(5)
+                          } else {
+                            setStrength(value)
+                          }
+                        }}
+                        className="w-20"
+                      />
+                      <p className="text-xs text-muted-foreground whitespace-nowrap">
+                        1 - less noise, worse detection 5 - more noise, better detection
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>
