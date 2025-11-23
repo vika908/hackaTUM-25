@@ -1,7 +1,19 @@
-A set of custom generative models with different watermarking capabilities enabled. 
-The scripts can be easily configured to run on Google Colab using the free T4 GPU.
+# 🎨 Waldo (Generation Models)
 
-The models here are already ready to be used as a fastapi server connected with ngrok. Customise ngrok to your liking and run the scripts.
+A collection of custom generative models equipped with advanced watermarking capabilities. These notebooks are designed to be run on **Google Colab** (free T4 GPU recommended) or a local GPU machine.
+
+## 🚀 Quick Start
+
+1.  **Open a Notebook**:
+    -   [`gemma-2b-2-it.ipynb`](./gemma-2b-2-it.ipynb) for Text.
+    -   [`stablediffusion-v1-5.ipynb`](./stablediffusion-v1-5.ipynb) for Images.
+2.  **Install Dependencies**: Run the first cell to install `transformers`, `diffusers`, `fastapi`, etc.
+3.  **Configure Tokens**: Add your HuggingFace and Ngrok tokens where indicated.
+4.  **Run**: Execute all cells to start the generation server.
+
+## 📡 API & Deployment
+
+The notebooks automatically launch a **FastAPI** server exposed via **Ngrok**.
 
 ## Models
 

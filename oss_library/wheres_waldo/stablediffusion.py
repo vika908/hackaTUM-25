@@ -6,11 +6,9 @@ def get_radial_profile(fft_shift, center, max_r):
     r = np.sqrt((x - center[1])**2 + (y - center[0])**2)
     r = r.astype(int)
 
-    # Handle division by zero or empty bins safely
     tbin = np.bincount(r.ravel(), fft_shift.ravel())
     nr = np.bincount(r.ravel())
 
-    # Avoid division by zero
     radialprofile = np.zeros_like(tbin, dtype=float)
     nonzero = nr > 0
     radialprofile[nonzero] = tbin[nonzero] / nr[nonzero]
@@ -43,8 +41,6 @@ class StableDiffusionDetector:
 
         signal = profile[self.target_radius]
 
-        # Neighbors for noise estimation
-        # Ensure indices are within bounds
         start_idx = max(0, self.target_radius - 5)
         end_idx_1 = max(0, self.target_radius - 2)
         start_idx_2 = min(len(profile), self.target_radius + 2)
@@ -65,13 +61,11 @@ class StableDiffusionDetector:
         noise_mean = np.mean(neighbors)
         noise_std = np.std(neighbors)
 
-        # Avoid division by zero
         z_score = (signal - noise_mean) / (noise_std + 1e-8)
         z_score = float(z_score)
 
         is_detected = z_score > self.threshold
 
-        # Simple confidence logic
         if z_score > 6.0: confidence = "Very High"
         elif z_score > 3.0: confidence = "High"
         elif z_score > 2.0: confidence = "Suspect"

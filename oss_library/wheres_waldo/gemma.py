@@ -37,7 +37,6 @@ class GemmaDetector:
         self.keys = self.config["keys"]
 
     def score(self, text: str) -> float:
-        # Standard Statistical Scoring
         ids = self.tokenizer(text, add_special_tokens=True)['input_ids']
         if len(ids) <= self.ngram_len: return 0.0
         seq_len = len(ids) - self.ngram_len
@@ -60,7 +59,6 @@ class GemmaDetector:
         return numpy_weighted_mean_score(np.array(g_vals), np.array(mask))
 
     def detect(self, text: str) -> dict:
-        # CHECK 1: Invisible Symbol (Hard Match)
         if "\u200b" in text:
             return {
                 "score": 1.0,
@@ -68,7 +66,6 @@ class GemmaDetector:
                 "method": "Deterministic"
             }
 
-        # CHECK 2: Statistical (Fallback)
         score = self.score(text)
 
         return {
